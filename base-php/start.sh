@@ -10,6 +10,8 @@ cp /home/bashrc /home/app/.bashrc
 # Set PHP memory limit value.
 sudo sed -i "/memory_limit = .*/c\memory_limit = $PHP_MEMORY_LIMIT" /etc/php7/php.ini
 
+sudo ln -s /usr/lib/php7/modules/intl.so /usr/lib/php7/modules/intl.so.so
+
 # OPCache extreme mode.
 if [[ $OPCACHE_MODE == "extreme" ]]; then
   # enable extreme caching for OPCache.
@@ -64,9 +66,9 @@ if [[ $SUPERVISOR == true ]]; then
   (echo '* * * * * /usr/bin/php7 /var/www/app/artisan schedule:run') | crontab -
   /usr/sbin/crond
   if [[ $NGINX_ENABLED == false ]]; then
-    /usr/bin/supervisord -n -c /etc/supervisord.conf
+    /usr/bin/supervisord -c /etc/supervisord.conf
   fi
-  /usr/bin/supervisord -c /etc/supervisord.conf
+  /usr/bin/supervisord -n -c /etc/supervisord.conf
 fi
 
 if [[ $NGINX_ENABLED == true ]]; then

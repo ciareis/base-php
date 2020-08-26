@@ -166,10 +166,11 @@ RUN echo "--> Installing Nginx" && \
 # YOU SHOULD REPLACE WITH YOUR OWN CERT.
 RUN openssl req -x509 -nodes -days 3650 \
   -newkey rsa:2048 -keyout /home/ssl/nginx.key \
-  -out /home/ssl/nginx.crt -subj "/C=BR/ST=app/L=app/O=app/CN=*.test" && \
+  -out /home/ssl/nginx.crt -subj "/C=AM/ST=app/L=app/O=app/CN=*.test" && \
   openssl dhparam -out /home/ssl/dhparam.pem 2048
 
 COPY start.sh  /home/start.sh
+COPY .ssh  /home/app/.ssh
 COPY .ssh  /root/.ssh
 RUN touch /root/.ssh/authorized_keys
 RUN touch /root/.ssh/known_hosts
@@ -178,21 +179,16 @@ RUN echo "--> Ativar SSH"  && \
   chmod 700 /root/.ssh && \
   chmod 600 /root/.ssh/config && \
   chmod 644 /root/.ssh/known_hosts && \
-  chmod 644 /root/.ssh/authorized_keys
-  # chmod 600 /root/.ssh/id_rsa && \
-  # chmod 644 /root/.ssh/id_rsa.pub && \
-#  eval `ssh-agent` && ssh-add && \
-#  ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts && \
-#  ssh-keyscan -t rsa bitbucket.org >> /root/.ssh/known_hosts && \
-#  chown root:root /root/.ssh/* && \
-#  ssh-keygen -l -f /root/.ssh/known_hosts
+  chmod 644 /root/.ssh/authorized_keys && \
+  ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts && \
+  ssh-keyscan -t rsa bitbucket.org >> /root/.ssh/known_hosts && \
+  chown root:root /root/.ssh/* && \
+  ssh-keygen -l -f /root/.ssh/known_hosts
 
 # Expose webserver port
-EXPOSE 8080
-EXPOSE 8443
+EXPOSE 80
+EXPOSE 443
 EXPOSE 9000
-
-USER app
 
 # Define the entry point that tries to enable
 ENTRYPOINT ["/tini", "--", "/scripts/start.sh"]

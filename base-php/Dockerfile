@@ -130,6 +130,11 @@ RUN  echo "---> INSTALL PHP" && \
   chmod +x /scripts/start.sh && \
   rm -rf /tmp/*
 
+# iconv(): Wrong charset, conversion from `UTF-8' to `ASCII//TRANSLIT//IGNORE' is not allowed
+RUN echo -e "\n # ---> Resolve problema com iconv \n" && \
+ apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
 # Supervisor
 RUN echo -e "\n # ---> Installing Supervisor \n" && \
   apk add --no-cache --update supervisor

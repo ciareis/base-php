@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM alpine:3.11
 
 # Repository/Image Maintainer
 LABEL maintainer="Leandro Henrique <emtudo@gmail.com>"
@@ -29,8 +29,8 @@ ADD bashrc /home/bashrc
 RUN echo "---> Enabling PHP-Alpine" && \
   apk add --no-cache --update wget && \
   wget -O /etc/apk/keys/php-alpine.rsa.pub https://dl.bintray.com/php-alpine/key/php-alpine.rsa.pub && \
-  echo "http://dl-cdn.alpinelinux.org/alpine/v3.12/main" > /etc/apk/repositories && \
-  echo "http://dl-cdn.alpinelinux.org/alpine/v3.12/community" >> /etc/apk/repositories && \
+  echo "http://dl-cdn.alpinelinux.org/alpine/v3.11/main" > /etc/apk/repositories && \
+  echo "http://dl-cdn.alpinelinux.org/alpine/v3.11/community" >> /etc/apk/repositories && \
   echo "https://dl.bintray.com/php-alpine/v3.11/php-7.4" >> /etc/apk/repositories
 
 RUN  echo "---> INSTALL PHP" && \
@@ -96,6 +96,10 @@ RUN  echo "---> INSTALL PHP" && \
   php-xmlreader \
   php-xsl \
   php-zip \
+  php-xmlwriter \
+  php-simplexml \
+  php-fileinfo \
+  php-tokenizer \
   php-zlib && \
   sudo ln -s /usr/bin/php7 /usr/bin/php && \
   sudo ln -s /usr/bin/php-cgi7 /usr/bin/php-cgi && \

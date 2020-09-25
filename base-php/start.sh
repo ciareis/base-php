@@ -66,9 +66,9 @@ if [[ $SUPERVISOR == true ]]; then
   (echo '* * * * * /usr/bin/php7 /var/www/app/artisan schedule:run') | crontab -
   /usr/sbin/crond
   if [[ $NGINX_ENABLED == false ]]; then
-    /usr/bin/supervisord -c /etc/supervisord.conf
+    /usr/bin/supervisord -n -c /etc/supervisord.conf
   fi
-  /usr/bin/supervisord -n -c /etc/supervisord.conf
+  /usr/bin/supervisord -c /etc/supervisord.conf
 fi
 
 if [[ $NGINX_ENABLED == true ]]; then

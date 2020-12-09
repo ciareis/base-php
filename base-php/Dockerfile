@@ -105,7 +105,7 @@ RUN  echo "---> INSTALL PHP" && \
   sudo ln -s /usr/bin/php-cgi7 /usr/bin/php-cgi && \
   sudo ln -s /usr/sbin/php-fpm7 /usr/sbin/php-fpm && \
   echo "---> Installing Composer" && \
-  curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+  curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --2 && \
   echo "---> Cleaning up" && \
   rm -rf /tmp/* && \
   echo "---> Adding the app user" && \

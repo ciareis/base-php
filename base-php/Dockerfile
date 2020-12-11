@@ -112,7 +112,7 @@ RUN  echo "---> INSTALL PHP" && \
   adduser -D -u 1000 app && \
   mkdir -p /var/www/app && \
   chown -R app:app /var/www && \
-  wget -O /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-static && \
+  wget -O /tini https://github.com/krallin/tini/releases/download/v0.19.0/tini-static && \
   chmod +x /tini && \
   echo "---> Configuring PHP" && \
   echo "app  ALL = ( ALL ) NOPASSWD: ALL" >> /etc/sudoers && \

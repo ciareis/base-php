@@ -27,7 +27,7 @@ ADD bashrc /home/bashrc
 
 # Install PHP From DotDeb, Common Extensions, Composer and then cleanup
 RUN echo "---> Enabling PHP-Alpine" && \
-  apk add --no-cache --update wget && \
+  apk add --no-cache --update acl wget && \
   wget -O /etc/apk/keys/php-alpine.rsa.pub https://dl.bintray.com/php-alpine/key/php-alpine.rsa.pub && \
   echo "http://dl-cdn.alpinelinux.org/alpine/v3.11/main" > /etc/apk/repositories && \
   echo "http://dl-cdn.alpinelinux.org/alpine/v3.11/community" >> /etc/apk/repositories && \

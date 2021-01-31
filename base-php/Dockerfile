@@ -1,4 +1,4 @@
-FROM alpine:3.11
+FROM alpine:3.12
 
 # Repository/Image Maintainer
 LABEL maintainer="Leandro Henrique <emtudo@gmail.com>"
@@ -20,21 +20,14 @@ ENV FRAMEWORK=laravel \
   ENVIRONMENT=production
 
 # Add the ENTRYPOINT script
+COPY etc /etc
 RUN mkdir /scripts
 ADD start.sh /scripts/start.sh
 ADD bashrc /home/app/.bashrc
 ADD bashrc /home/bashrc
 
-# Install PHP From DotDeb, Common Extensions, Composer and then cleanup
-RUN echo "---> Enabling PHP-Alpine" && \
-  apk add --no-cache --update acl wget && \
-  wget -O /etc/apk/keys/php-alpine.rsa.pub https://dl.bintray.com/php-alpine/key/php-alpine.rsa.pub && \
-  echo "http://dl-cdn.alpinelinux.org/alpine/v3.11/main" > /etc/apk/repositories && \
-  echo "http://dl-cdn.alpinelinux.org/alpine/v3.11/community" >> /etc/apk/repositories && \
-  echo "https://dl.bintray.com/php-alpine/v3.11/php-7.4" >> /etc/apk/repositories
-
 RUN  echo "---> INSTALL PHP" && \
-  apk add --no-cache --update \
+  apk add --update \
   curl \
   poppler \
   bash \
@@ -48,60 +41,56 @@ RUN  echo "---> INSTALL PHP" && \
   unzip \
   wget \
   make \
-  sudo && \
-  echo "---> Preparing and Installing PHP" && \
-  apk add --no-cache --update \
-  php \
-  php-apcu \
-  php-bcmath \
-  php-bz2 \
-  php-calendar \
-  php-ctype \
-  php-cgi \
-  php-curl \
-  php-dom \
-  php-exif \
-  php-fpm \
-  php-ftp \
-  php-gd \
-  php-gmp \
-  php-iconv \
-  php-imagick \
-  php-imap \
-  php-intl \
-  php-json \
-  php-mbstring \
-  php-memcached \
-  php-mongodb \
-  php-mysqli \
-  php-mysqlnd \
-  php-opcache \
-  php-openssl \
-  php-pcntl \
-  php-pdo_mysql \
-  php-pdo_pgsql \
-  php-pdo_sqlite \
-  php-pgsql \
-  php-phar \
-  php-phpdbg \
-  php-posix \
-  php-redis \
-  php-soap \
-  php-sockets \
-  php-swoole \
-  php-sodium \
-  php-sqlite3 \
-  php-xdebug \
-  php-xml \
-  php-xmlreader \
-  php-xsl \
-  php-zip \
-  php-xmlwriter \
-  php-simplexml \
-  php-fileinfo \
-  php-tokenizer \
-  php-zlib && \
-  sudo ln -s /usr/bin/php7 /usr/bin/php && \
+  sudo
+
+RUN echo "---> Preparing and Installing PHP" && \
+  apk add --update \
+  php8 \
+  php8-apcu \
+  php8-bcmath \
+  php8-bz2 \
+  php8-calendar \
+  php8-ctype \
+  php8-cgi \
+  php8-curl \
+  php8-dom \
+  php8-exif \
+  php8-fpm \
+  php8-ftp \
+  php8-gd \
+  php8-gmp \
+  php8-iconv \
+  php8-imagick \
+  php8-imap \
+  php8-intl \
+  php8-mbstring \
+  php8-memcached \
+  php8-mongodb \
+  php8-mysqli \
+  php8-mysqlnd \
+  php8-opcache \
+  php8-openssl \
+  php8-pcntl \
+  php8-pdo_mysql \
+  php8-pdo_pgsql \
+  php8-pdo_sqlite \
+  php8-pgsql \
+  php8-phar \
+  php8-phpdbg \
+  php8-posix \
+  php8-redis \
+  php8-soap \
+  php8-sockets \
+  php8-swoole \
+  php8-sodium \
+  php8-sqlite3 \
+  php8-xdebug \
+  php8-xml \
+  php8-xmlreader \
+  php8-xsl \
+  php8-zip \
+  php8-zlib && \
+  sudo ln -s /usr/bin/php8 /usr/bin/php && \
   sudo ln -s /usr/bin/php-cgi7 /usr/bin/php-cgi && \
   sudo ln -s /usr/sbin/php-fpm7 /usr/sbin/php-fpm && \
   echo "---> Installing Composer" && \
@@ -116,20 +105,20 @@ RUN  echo "---> INSTALL PHP" && \
   chmod +x /tini && \
   echo "---> Configuring PHP" && \
   echo "app  ALL = ( ALL ) NOPASSWD: ALL" >> /etc/sudoers && \
-  sed -i "/user = .*/c\user = app" /etc/php7/php-fpm.d/www.conf && \
-  sed -i "/^group = .*/c\group = app" /etc/php7/php-fpm.d/www.conf && \
-  sed -i "/listen.owner = .*/c\listen.owner = app" /etc/php7/php-fpm.d/www.conf && \
-  sed -i "/listen.group = .*/c\listen.group = app" /etc/php7/php-fpm.d/www.conf && \
-  sed -i "/listen = .*/c\listen = [::]:9000" /etc/php7/php-fpm.d/www.conf && \
-  sed -i "/;access.log = .*/c\access.log = /proc/self/fd/2" /etc/php7/php-fpm.d/www.conf && \
-  sed -i "/;clear_env = .*/c\clear_env = no" /etc/php7/php-fpm.d/www.conf && \
-  sed -i "/;catch_workers_output = .*/c\catch_workers_output = yes" /etc/php7/php-fpm.d/www.conf && \
-  sed -i "/pid = .*/c\;pid = /run/php/php7.1-fpm.pid" /etc/php7/php-fpm.conf && \
-  sed -i "/;daemonize = .*/c\daemonize = yes" /etc/php7/php-fpm.conf && \
-  sed -i "/error_log = .*/c\error_log = /proc/self/fd/2" /etc/php7/php-fpm.conf && \
-  sed -i "/post_max_size = .*/c\post_max_size = 1000M" /etc/php7/php.ini && \
-  sed -i "/upload_max_filesize = .*/c\upload_max_filesize = 1000M" /etc/php7/php.ini && \
-  sed -i "/zend_extension=xdebug/c\;zend_extension=xdebug" /etc/php7/conf.d/00_xdebug.ini && \
+  sed -i "/user = .*/c\user = app" /etc/php8/php-fpm.d/www.conf && \
+  sed -i "/^group = .*/c\group = app" /etc/php8/php-fpm.d/www.conf && \
+  sed -i "/listen.owner = .*/c\listen.owner = app" /etc/php8/php-fpm.d/www.conf && \
+  sed -i "/listen.group = .*/c\listen.group = app" /etc/php8/php-fpm.d/www.conf && \
+  sed -i "/listen = .*/c\listen = [::]:9000" /etc/php8/php-fpm.d/www.conf && \
+  sed -i "/;access.log = .*/c\access.log = /proc/self/fd/2" /etc/php8/php-fpm.d/www.conf && \
+  sed -i "/;clear_env = .*/c\clear_env = no" /etc/php8/php-fpm.d/www.conf && \
+  sed -i "/;catch_workers_output = .*/c\catch_workers_output = yes" /etc/php8/php-fpm.d/www.conf && \
+  sed -i "/pid = .*/c\;pid = /run/php/php8.1-fpm.pid" /etc/php8/php-fpm.conf && \
+  sed -i "/;daemonize = .*/c\daemonize = yes" /etc/php8/php-fpm.conf && \
+  sed -i "/error_log = .*/c\error_log = /proc/self/fd/2" /etc/php8/php-fpm.conf && \
+  sed -i "/post_max_size = .*/c\post_max_size = 1000M" /etc/php8/php.ini && \
+  sed -i "/upload_max_filesize = .*/c\upload_max_filesize = 1000M" /etc/php8/php.ini && \
+  sed -i "/zend_extension=xdebug/c\;zend_extension=xdebug" /etc/php8/conf.d/00_xdebug.ini && \
   chown -R app:app /home/app && \
   chmod +x /scripts/start.sh && \
   rm -rf /tmp/*

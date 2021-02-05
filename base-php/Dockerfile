@@ -7,7 +7,7 @@ USER root
 
 # Variables for enabling
 ENV FRAMEWORK=laravel \
-  OPCACHE_MODE="extreme" \
+  OPCACHE_MODE="jit" \
   PHP_MEMORY_LIMIT=512M \
   XDEBUG_ENABLED=false \
   TERM=xterm-256color \

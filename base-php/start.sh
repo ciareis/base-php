@@ -22,6 +22,21 @@ if [[ $OPCACHE_MODE == "extreme" ]]; then
   echo "opcache.fast_shutdown=0" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
 fi
 
+# OPCache extreme mode.
+if [[ $OPCACHE_MODE == "jit" ]]; then
+  # enable extreme caching for OPCache.
+  echo "opcache.enable=1" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
+  echo "opcache.memory_consumption=512" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
+  echo "opcache.interned_strings_buffer=128" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
+  echo "opcache.max_accelerated_files=32531" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
+  echo "opcache.validate_timestamps=0" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
+  echo "opcache.save_comments=1" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
+  echo "opcache.fast_shutdown=0" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
+  echo "opcache.jit_buffer_size=100M" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
+  echo "opcache.jit=1235" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
+  echo "opcache.jit_debug=0" | sudo tee -a /etc/php8/conf.d/00_opcache.ini > /dev/null
+fi
+
 # OPCache disabled mode.
 if [[ $OPCACHE_MODE == "disabled" ]]; then
   # disable extension.

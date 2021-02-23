@@ -78,7 +78,7 @@ if [[ $SUPERVISOR == true ]]; then
   sudo chown -R app:app /var/run
   sudo chown -R app:app /run
   echo -e "\n # ---> Crontab \n" && \
-  (echo '* * * * * /usr/bin/php8 /var/www/app/artisan schedule:run') | crontab -
+  (echo '* * * * * /usr/bin/sudo -u app /usr/bin/php8 /var/www/app/artisan schedule:run') | crontab -
   /usr/sbin/crond
   if [[ $NGINX_ENABLED == false ]]; then
     /usr/bin/supervisord -n -c /etc/supervisord.conf

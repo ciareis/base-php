@@ -109,6 +109,8 @@ RUN echo "---> Preparing and Installing PHP" && \
   chmod +x /scripts/start.sh && \
   rm -rf /tmp/*
 
+RUN apk del --no-cache curl wget
+
 # iconv(): Wrong charset, conversion from `UTF-8' to `ASCII//TRANSLIT//IGNORE' is not allowed
 RUN echo -e "\n # ---> Resolve problema com iconv \n" && \
   apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv

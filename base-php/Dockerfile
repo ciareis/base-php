@@ -5,20 +5,6 @@ LABEL maintainer="Leandro Henrique <emtudo@gmail.com>"
 
 USER root
 
-# Variables for enabling
-ENV FRAMEWORK=laravel \
-  OPCACHE_MODE="jit" \
-  PHP_MEMORY_LIMIT=512M \
-  XDEBUG_ENABLED=false \
-  TERM=xterm-256color \
-  LARAVEL_CACHE=true \
-  MIGRATE=true \
-  COLORTERM=truecolor \
-  COMPOSER_PROCESS_TIMEOUT=1200 \
-  NGINX_ENABLED=true \
-  SUPERVISOR=false \
-  ENVIRONMENT=production
-
 # Add the ENTRYPOINT script
 COPY etc /etc
 RUN mkdir /scripts
@@ -31,20 +17,20 @@ RUN  echo "---> INSTALL PHP" && \
   curl \
   poppler \
   bash \
-  fontconfig \
+  #  fontconfig \
   libxrender \
   libxext \
   imagemagick \
-  nano \
+  #  nano \
   vim \
-  git \
+  #  git \
   unzip \
   wget \
   make \
   sudo
 
 RUN echo "---> Preparing and Installing PHP" && \
-  apk add --update \
+  apk add --no-cache --update \
   php8 \
   php8-apcu \
   php8-bcmath \
@@ -66,8 +52,8 @@ RUN echo "---> Preparing and Installing PHP" && \
   php8-mbstring \
   php8-memcached \
   php8-mongodb \
-  php8-mysqli \
-  php8-mysqlnd \
+  #  php8-mysqli \
+  #  php8-mysqlnd \
   php8-opcache \
   php8-openssl \
   php8-pcntl \
@@ -81,10 +67,10 @@ RUN echo "---> Preparing and Installing PHP" && \
   php8-redis \
   php8-soap \
   php8-sockets \
-  php8-swoole \
+  #  php8-swoole \
   php8-sodium \
-  php8-sqlite3 \
-  php8-xdebug \
+  #  php8-sqlite3 \
+  #  php8-xdebug \
   php8-xml \
   php8-xmlreader \
   php8-xsl \
@@ -118,14 +104,14 @@ RUN echo "---> Preparing and Installing PHP" && \
   sed -i "/error_log = .*/c\error_log = /proc/self/fd/2" /etc/php8/php-fpm.conf && \
   sed -i "/post_max_size = .*/c\post_max_size = 1000M" /etc/php8/php.ini && \
   sed -i "/upload_max_filesize = .*/c\upload_max_filesize = 1000M" /etc/php8/php.ini && \
-  sed -i "/zend_extension=xdebug/c\;zend_extension=xdebug" /etc/php8/conf.d/00_xdebug.ini && \
+  # sed -i "/zend_extension=xdebug/c\;zend_extension=xdebug" /etc/php8/conf.d/00_xdebug.ini && \
   chown -R app:app /home/app && \
   chmod +x /scripts/start.sh && \
   rm -rf /tmp/*
 
 # iconv(): Wrong charset, conversion from `UTF-8' to `ASCII//TRANSLIT//IGNORE' is not allowed
 RUN echo -e "\n # ---> Resolve problema com iconv \n" && \
- apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
+  apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 # Supervisor
@@ -182,6 +168,20 @@ RUN echo "--> Ativar SSH"  && \
   ssh-keyscan -t rsa bitbucket.org >> /root/.ssh/known_hosts && \
   chown root:root /root/.ssh/* && \
   ssh-keygen -l -f /root/.ssh/known_hosts
+
+# Variables for enabling
+ENV FRAMEWORK=laravel \
+  OPCACHE_MODE="jit" \
+  PHP_MEMORY_LIMIT=512M \
+  XDEBUG_ENABLED=false \
+  TERM=xterm-256color \
+  LARAVEL_CACHE=true \
+  MIGRATE=true \
+  COLORTERM=truecolor \
+  COMPOSER_PROCESS_TIMEOUT=1200 \
+  NGINX_ENABLED=true \
+  SUPERVISOR=false \
+  ENVIRONMENT=production
 
 # Expose webserver port
 EXPOSE 80

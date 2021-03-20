@@ -133,7 +133,7 @@ COPY sites /etc/nginx/sites
 
 # Install nginx from dotdeb (already enabled on base image)
 RUN echo "--> Installing Nginx" && \
-  apk add --update nginx openssl openssh-client npm && \
+  apk add --update nginx openssl openssh-client && \
   rm -rf /tmp/* /var/tmp/* /usr/share/doc/* && \
   echo "--> Fixing permissions" && \
   mkdir /var/tmp/nginx && \

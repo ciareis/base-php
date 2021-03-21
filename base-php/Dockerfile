@@ -109,7 +109,7 @@ RUN echo "---> Preparing and Installing PHP" && \
   chmod +x /scripts/start.sh && \
   rm -rf /tmp/*
 
-RUN apk del curl wget
+RUN apk del curl
 
 # iconv(): Wrong charset, conversion from `UTF-8' to `ASCII//TRANSLIT//IGNORE' is not allowed
 RUN echo -e "\n # ---> Resolve problema com iconv \n" && \

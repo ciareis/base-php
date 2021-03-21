@@ -16,7 +16,7 @@ RUN  echo "---> INSTALL PHP" && \
   apk add --update \
   curl \
   poppler \
-  bash \
+  #  bash \
   #  fontconfig \
   libxrender \
   libxext \
@@ -37,12 +37,12 @@ RUN echo "---> Preparing and Installing PHP" && \
   php8-bz2 \
   php8-calendar \
   php8-ctype \
-  php8-cgi \
+  #  php8-cgi \
   php8-curl \
   php8-dom \
   php8-exif \
   php8-fpm \
-  php8-ftp \
+  #  php8-ftp \
   php8-gd \
   php8-gmp \
   php8-iconv \
@@ -51,7 +51,7 @@ RUN echo "---> Preparing and Installing PHP" && \
   php8-intl \
   php8-mbstring \
   php8-memcached \
-  php8-mongodb \
+  #  php8-mongodb \
   #  php8-mysqli \
   #  php8-mysqlnd \
   php8-opcache \
@@ -59,25 +59,25 @@ RUN echo "---> Preparing and Installing PHP" && \
   php8-pcntl \
   php8-pdo_mysql \
   php8-pdo_pgsql \
-  php8-pdo_sqlite \
-  php8-pgsql \
+  #  php8-pdo_sqlite \
+  #  php8-pgsql \
   php8-phar \
-  php8-phpdbg \
+  #  php8-phpdbg \
   php8-posix \
   php8-redis \
   php8-soap \
-  php8-sockets \
+  #  php8-sockets \
   #  php8-swoole \
   php8-sodium \
   #  php8-sqlite3 \
   #  php8-xdebug \
   php8-xml \
   php8-xmlreader \
-  php8-xsl \
+  #  php8-xsl \
   php8-zip \
   php8-zlib && \
   sudo ln -s /usr/bin/php8 /usr/bin/php && \
-  sudo ln -s /usr/bin/php-cgi7 /usr/bin/php-cgi && \
+  #  sudo ln -s /usr/bin/php-cgi8 /usr/bin/php-cgi && \
   sudo ln -s /usr/sbin/php-fpm7 /usr/sbin/php-fpm && \
   echo "---> Installing Composer" && \
   curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --2 && \

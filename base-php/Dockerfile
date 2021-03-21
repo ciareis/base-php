@@ -16,7 +16,7 @@ RUN  echo "---> INSTALL PHP" && \
   apk add --update \
   curl \
   poppler \
-  #  bash \
+  bash \
   #  fontconfig \
   libxrender \
   libxext \

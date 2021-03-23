@@ -16,7 +16,7 @@ RUN  echo "---> INSTALL PHP" && \
   apk add --update \
   curl \
   poppler \
-  bash \
+  # bash \
   #  fontconfig \
   libxrender \
   libxext \
@@ -172,17 +172,12 @@ RUN echo "--> Ativar SSH"  && \
   ssh-keygen -l -f /root/.ssh/known_hosts
 
 # Variables for enabling
-ENV FRAMEWORK=laravel \
-  OPCACHE_MODE="jit" \
+ENV OPCACHE_MODE="jit" \
   PHP_MEMORY_LIMIT=512M \
-  XDEBUG_ENABLED=false \
   TERM=xterm-256color \
-  LARAVEL_CACHE=true \
   MIGRATE=true \
   COLORTERM=truecolor \
   COMPOSER_PROCESS_TIMEOUT=1200 \
-  NGINX_ENABLED=true \
-  SUPERVISOR=false \
   ENVIRONMENT=production
 
 # Expose webserver port
@@ -194,4 +189,4 @@ EXPOSE 9000
 ENTRYPOINT ["/tini", "--", "/scripts/start.sh"]
 
 # As non daemon and single base image, it may be used as cli container
-CMD ["/bin/bash"]
+CMD ["production"]

@@ -5,7 +5,6 @@ LABEL maintainer="Leandro Henrique <emtudo@gmail.com>"
 
 USER root
 
-# Add the ENTRYPOINT script
 COPY etc /etc
 RUN mkdir /scripts
 ADD start.sh /scripts/start.sh
@@ -22,9 +21,9 @@ RUN  echo "---> INSTALL PHP" && \
   libxext \
   imagemagick \
   #  nano \
-  vim \
+  # vim \
   #  git \
-  unzip \
+  #  unzip \
   wget \
   # make \
   sudo
@@ -155,8 +154,8 @@ RUN openssl req -x509 -nodes -days 3650 \
   -out /home/ssl/nginx.crt -subj "/C=AM/ST=app/L=app/O=app/CN=*.test" && \
   openssl dhparam -out /home/ssl/dhparam.pem 2048
 
-COPY start.sh  /home/start.sh
-COPY .ssh  /home/app/.ssh
+COPY --chown=app:app start.sh  /home/start.sh
+COPY --chown=app:app .ssh  /home/app/.ssh
 COPY .ssh  /root/.ssh
 RUN touch /root/.ssh/authorized_keys
 RUN touch /root/.ssh/known_hosts
@@ -172,19 +171,18 @@ RUN echo "--> Ativar SSH"  && \
   ssh-keygen -l -f /root/.ssh/known_hosts
 
 # Variables for enabling
-ENV OPCACHE_MODE="jit" \
-  PHP_MEMORY_LIMIT=512M \
+ENV PHP_MEMORY_LIMIT=512M \
   TERM=xterm-256color \
-  MIGRATE=true \
   COLORTERM=truecolor \
-  COMPOSER_PROCESS_TIMEOUT=1200 \
-  ENVIRONMENT=production
+  COMPOSER_PROCESS_TIMEOUT=1200
 
 # Expose webserver port
 EXPOSE 80
 EXPOSE 443
-EXPOSE 9000
 
+RUN chown app:app -R /scripts
+
+USER app
 # Define the entry point that tries to enable
 ENTRYPOINT ["/tini", "--", "/scripts/start.sh"]
 

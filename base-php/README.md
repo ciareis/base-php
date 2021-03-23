@@ -1,18 +1,15 @@
-# ENVS
+# SETTINGS
 
-FRAMEWORK=laravel
-  - laravel
-  - laravel-cache
-  - symfony
-  - symfony-dev
+## COMMANDS
 
-OPCACHE_MODE="extreme"
-  - extreme
-  - disabled
+- production
+- queue_production
+- dev
+- queue_dev
 
-PHP_MEMORY_LIMIT=512M
-XDEBUG_ENABLED=true
-TERM=xterm-256color
-COLORTERM=truecolor
-COMPOSER_PROCESS_TIMEOUT=1200
-LOAD_NGINX=true
+## ENVS
+
+- PHP_MEMORY_LIMIT=512M
+- TERM=xterm-256color
+- COLORTERM=truecolor
+- COMPOSER_PROCESS_TIMEOUT=1200

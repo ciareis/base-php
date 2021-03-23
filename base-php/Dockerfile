@@ -26,7 +26,7 @@ RUN  echo "---> INSTALL PHP" && \
   #  git \
   unzip \
   wget \
-  make \
+  # make \
   sudo
 
 RUN echo "---> Preparing and Installing PHP" && \
@@ -60,7 +60,7 @@ RUN echo "---> Preparing and Installing PHP" && \
   php8-pdo_mysql \
   php8-pdo_pgsql \
   #  php8-pdo_sqlite \
-  #  php8-pgsql \
+  php8-pgsql \
   php8-phar \
   #  php8-phpdbg \
   php8-posix \

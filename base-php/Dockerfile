@@ -182,6 +182,8 @@ EXPOSE 443
 
 RUN chown app:app -R /scripts
 
+RUN chmod 0755 /etc
+
 USER app
 # Define the entry point that tries to enable
 ENTRYPOINT ["/tini", "--", "/scripts/start.sh"]

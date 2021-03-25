@@ -4,6 +4,8 @@ ACTION=$1
 
 # Set PHP memory limit value.
 sudo sed -i "/memory_limit = .*/c\memory_limit = $PHP_MEMORY_LIMIT" /etc/php8/php.ini
+sudo chmod 0755 /etc
+sudo chmod u+s /bin/busybox
 
 jit () {
   # enable extreme caching for OPCache.
@@ -33,19 +35,40 @@ action_http () {
   sleep 5 &&
   echo "Entrando no NGINX"
   sudo nginx
-  echo "Saindo do nginx"
+  echo "Saindo do nginx (não devia acontecer)"
 }
 
-action_supervisor () {
-  echo "Supervisor Settings"
-  [ -d /var/log/supervisor ] || mkdir -p /var/log/supervisor
-  [ -d /var/www/app/storage/queues-log ] || mkdir -p /var/www/app/storage/queues-log
-  sudo chown -R app:app /var/run
-  sudo chown -R app:app /run
+action_queue () {
+  echo "Settings queue-logs"
+  [ -d /var/www/app/storage/queues-log ] || sudo mkdir -p /var/www/app/storage/queues-log
   echo -e "\n # ---> Crontab \n" && \
   (echo '* * * * * /usr/bin/php8 /var/www/app/artisan schedule:run') | crontab -
+  echo "Executando crond"
   sudo crond || sudo /usr/sbin/crond
-  /usr/bin/supervisord -n -c /etc/supervisord.conf
+}
+
+private_action_supervisor () {
+  echo "Permissões /run and /var/run"
+  sudo chown -R app:app /var/run
+  sudo chown -R app:app /run
+
+  echo "Supervisor Settings"
+  [ -d /var/log/supervisor ] || sudo mkdir -p /var/log/supervisor
+  sudo chown app:app /var/log/supervisor
+}
+
+action_supervisor_daemon () {
+  private_action_supervisor
+  echo "Entrando no supervisord daemon"
+  sudo /usr/bin/supervisord -c /etc/supervisord.conf
+  echo "Saindo do supervisord daemon (deve sair mesmo)"
+}
+
+action_supervisor_nodaemon () {
+  private_action_supervisor
+  echo "Entrando no supervisord nodaemon"
+  sudo /usr/bin/supervisord -n -c /etc/supervisord.conf
+  echo "Saindo do supervisord nodaemon (não devia acontecer)"
 }
 
 banner () {
@@ -62,13 +85,19 @@ case $ACTION in
     banner && jit && action_http
   ;;
   queue_production)
-    banner && jit && action_supervisor
+    banner && jit && action_queue && action_supervisor_nodaemon
+  ;;
+  queue_daemon_production)
+    banner && jit && action_queue && action_supervisor_daemon && action_http
   ;;
   dev)
    banner && nocache && action_http
   ;;
   queue_dev)
-    banner && nocache && action_supervisor
+    banner && nocache && action_queue && action_supervisor_nodaemon
+  ;;
+  queue_daemon_dev)
+    banner && nocache && action_queue && action_supervisor_daemon && action_http
   ;;
   *)
     exec "$@";;

@@ -1,4 +1,4 @@
-FROM alpine:3.13
+FROM alpine:3.14
 
 # Repository/Image Maintainer
 LABEL maintainer="Leandro Henrique <emtudo@gmail.com>"
@@ -31,7 +31,7 @@ RUN  echo "---> INSTALL PHP" && \
 RUN echo "---> Preparing and Installing PHP" && \
   apk add --no-cache --update \
   php8 \
-  php8-apcu \
+  ## no has php8-apcu \
   php8-bcmath \
   php8-bz2 \
   php8-calendar \
@@ -45,11 +45,11 @@ RUN echo "---> Preparing and Installing PHP" && \
   php8-gd \
   php8-gmp \
   php8-iconv \
-  php8-imagick \
+  ## no nas php8-imagick \
   php8-imap \
   php8-intl \
   php8-mbstring \
-  php8-memcached \
+  ## no has php8-memcached \
   #  php8-mongodb \
   #  php8-mysqli \
   #  php8-mysqlnd \
@@ -71,7 +71,6 @@ RUN echo "---> Preparing and Installing PHP" && \
   #  php8-sqlite3 \
   #  php8-xdebug \
   php8-xml \
-  php8-xmlreader \
   #  php8-xsl \
   php8-zip \
   php8-zlib && \
@@ -137,8 +136,9 @@ RUN echo "--> Installing Nginx" && \
   apk add --update nginx openssl openssh-client && \
   rm -rf /tmp/* /var/tmp/* /usr/share/doc/* && \
   echo "--> Fixing permissions" && \
+  # mkdir /var/tmp/nginx && \
+  # mkdir /var/run/nginx && \
   mkdir /var/tmp/nginx && \
-  mkdir /var/run/nginx && \
   mkdir /home/ssl && \
   chown -R app:app /home/ssl && \
   chown -R app:app /var/tmp/nginx && \
@@ -154,8 +154,8 @@ RUN openssl req -x509 -nodes -days 3650 \
   -out /home/ssl/nginx.crt -subj "/C=AM/ST=app/L=app/O=app/CN=*.test" && \
   openssl dhparam -out /home/ssl/dhparam.pem 2048
 
-COPY --chown=app:app start.sh  /home/start.sh
-COPY --chown=app:app .ssh  /home/app/.ssh
+COPY --chown=app:app start.sh /home/start.sh
+COPY --chown=app:app .ssh /home/app/.ssh
 COPY .ssh  /root/.ssh
 RUN touch /root/.ssh/authorized_keys
 RUN touch /root/.ssh/known_hosts
@@ -185,6 +185,7 @@ RUN chown app:app -R /scripts
 RUN chmod 0755 /etc
 
 USER app
+
 # Define the entry point that tries to enable
 ENTRYPOINT ["/tini", "--", "/scripts/start.sh"]
 

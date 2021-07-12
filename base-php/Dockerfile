@@ -73,6 +73,7 @@ RUN echo "---> Preparing and Installing PHP" && \
   php8-xml \
   #  php8-xsl \
   php8-zip \
+  php8-fileinfo \
   php8-tokenizer \
   php8-zlib && \
   sudo ln -s /usr/bin/php8 /usr/bin/php && \

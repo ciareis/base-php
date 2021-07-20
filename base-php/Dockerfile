@@ -50,7 +50,7 @@ RUN echo "---> Preparing and Installing PHP" && \
   php8-intl \
   php8-mbstring \
   ## no has php8-memcached \
-  #  php8-mongodb \
+  # php8-mongodb \
   #  php8-mysqli \
   #  php8-mysqlnd \
   php8-opcache \
@@ -71,6 +71,7 @@ RUN echo "---> Preparing and Installing PHP" && \
   #  php8-sqlite3 \
   #  php8-xdebug \
   php8-xml \
+  perl-image-exiftool \
   #  php8-xsl \
   php8-zip \
   php8-fileinfo \

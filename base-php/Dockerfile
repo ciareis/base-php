@@ -20,6 +20,7 @@ RUN  echo "---> INSTALL PHP" && \
   libxrender \
   libxext \
   imagemagick \
+  imagemagick-dev \
   #  nano \
   # vim \
   #  git \

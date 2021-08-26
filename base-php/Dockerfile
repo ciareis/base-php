@@ -59,7 +59,7 @@ RUN echo "---> Preparing and Installing PHP" && \
   php8-pcntl \
   php8-pdo_mysql \
   php8-pdo_pgsql \
-  #  php8-pdo_sqlite \
+  php8-pdo_sqlite \
   php8-pgsql \
   php8-phar \
   #  php8-phpdbg \
